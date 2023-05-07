@@ -11,12 +11,11 @@ class MovieSerializer(serializers.ModelSerializer):
             message='이미 존재하는 영화 이름입니다.',
         )])
     # movie_reviews = serializers.PrimaryKeyRelatedField(source='reviews', many=True, read_only=True)
-    # reviews = serializers.StringRelatedField(many=True)
+    reviews = serializers.StringRelatedField(many=True,read_only=True)
     
     class Meta:
         model = Movie
         fields = ['id', 'name', 'reviews','opening_date', 'running_time', 'overview']
-        read_only_fields = ['reviews']
 
 
 
