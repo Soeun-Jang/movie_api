@@ -1,34 +1,27 @@
 from rest_framework import serializers
-from .models import Movie, Actor
+from .models import Movie, Actor, Review
+from rest_framework.validators import UniqueValidator
 
-class MovieSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField()
-    opening_date = serializers.DateField()
-    running_time = serializers.IntegerField()
-    overview = serializers.CharField()
-    
-    def create(self, validated_data):
-        return Movie.objects.create(**validated_data) 
-    def update(self, instance, validated_data):
-            instance.name = validated_data.get('name', instance.name)
-            instance.opening_date = validated_data.get('opening_date', instance.opening_date)
-            instance.running_time = validated_data.get('running_time', instance.running_time)
-            instance.overview = validated_data.get('overview', instance.overview)
-            instance.save()
-            return instance
 
-class ActorSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField()
-    gender = serializers.CharField()
-    birth_date = serializers.DateField()
+class MovieSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(validators=[UniqueValidator(
+            queryset=Movie.objects.all(),
+            message='이미 존재하는 영화 이름입니다.',
+        )])
+    class Meta:
+        model = Movie
+        fields = ['id', 'name', 'opening_date', 'running_time', 'overview']
 
-    def create(self, validated_data):
-        return Actor.objects.create(**validated_data)
-    def update(self, instance, validated_data):
-      instance.name = validated_data.get('name', instance.name)
-      instance.gender = validated_data.get('gender', instance.gender)
-      instance.birth_date = validated_data.get('birth_date', instance.birth_date)
-      instance.save()
-      return instance
+
+class ActorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actor
+        fields = ['id', 'name', 'gender', 'birth_date']
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'movie', 'username', 'star', 'comment', 'created']
+        extra_kwargs = {
+            'movie': {'read_only': True},
+        }

@@ -12,4 +12,10 @@ class Actor(models.Model):
     name = models.CharField(max_length=20)
     gender = models.CharField(max_length=1)
     birth_date = models.DateField()
-    
+
+class Review(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    username = models.CharField(max_length=30)
+    star = models.IntegerField()
+    comment = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
