@@ -74,7 +74,8 @@ def actor_detail(request, pk):
 def review_list(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     if request.method == 'GET':
-        reviews = Review.objects.filter(movie=movie)
+        # reviews = Review.objects.filter(movie=movie)
+        reviews = movie.reviews.all()
         serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
