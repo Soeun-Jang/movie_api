@@ -6,7 +6,6 @@ class Movie(models.Model):
     opening_date = models.DateField()
     running_time = models.IntegerField()
     overview = models.TextField()
-    actors = models.ManyToManyField('Actor', related_name='movies')
 
     def __str__(self):
         return self.name

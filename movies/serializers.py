@@ -12,11 +12,10 @@ class MovieSerializer(serializers.ModelSerializer):
         )])
     # movie_reviews = serializers.PrimaryKeyRelatedField(source='reviews', many=True, read_only=True)
     # reviews = serializers.StringRelatedField(many=True)
-    actors = serializers.StringRelatedField(many=True, read_only=True)
     
     class Meta:
         model = Movie
-        fields = ['id', 'name', 'reviews','actors','opening_date', 'running_time', 'overview']
+        fields = ['id', 'name', 'reviews','opening_date', 'running_time', 'overview']
         read_only_fields = ['reviews']
 
 
@@ -32,11 +31,8 @@ class ReviewSerializer(serializers.ModelSerializer):
             'movie': {'read_only': True},
         }
 
-
-
 class ActorSerializer(serializers.ModelSerializer):
-    movies = MovieSerializer(many=True, read_only=True)
-
+  
     class Meta:
         model = Actor
-        fields = ['id', 'name', 'gender', 'birth_date', 'movies']
+        fields = ['id', 'name', 'gender', 'birth_date']
